@@ -44,6 +44,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/f
         ])
     ]
 })
+//this is a comment
 export class SearchFormComponent implements OnInit {
   searchForm:FormGroup;
   searchInput:AbstractControl;
