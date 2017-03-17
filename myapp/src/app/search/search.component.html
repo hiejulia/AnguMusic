@@ -1,0 +1,12 @@
+<div *ngIf="!checkSearch" class="error__box">
+    <h1 class="text__error">Not Found Song</h1>
+    
+    <button class="ui button red button__Goback" (click)="goBackMusic()">Back</button>
+</div>
+<div *ngIf="checkSearch">
+    <div class="container">
+        <div class="row">
+            <app-list-song [isDouble]="false" [listMusic]="listMusicSearing"></app-list-song>
+        </div>
+    </div>
+</div>
