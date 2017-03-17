@@ -3,14 +3,14 @@ import {Http,Response} from '@angular/http';
 import {Injectable} from '@angular/core';
 import {Music} from './music';
 import {Observable} from 'rxjs/Observable';
-const UrlApi = '';
+const UrlApi = 'https://api.soundcloud.com/playlists/209262931?client_id=2f98992c40b8edf17423d93bda2e04ab';
 
-@Injectable() 
+@Injectable()
 export class MusicService {
     constructor(private http:Http){}
     //get Music from api
     public getListMusic():Observable<Music[]> {
-        
+
         return this.http.get(UrlApi)
             .map(value => {
                 return value.json().data;
