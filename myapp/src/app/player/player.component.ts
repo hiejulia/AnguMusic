@@ -82,13 +82,90 @@ export class PlayerComponent implements OnInit, AfterViewInit, AfterViewChecked 
 
 
   updateTiming(){
+    setInterval(() => {
+      let Duration = this.player.nativeElement.duration;
+      let currentTime= this.player.nativeElement.currentTime;
+      this.currentTime = this.convertSecondstoMinutes(currentTime * 1000)
+            let percentage = (currentTime / Duration) * 100;
+            this.processBar.nativeElement.style.width = percentage + "%";
+        }, 50)
 
-  }
+    }
 
 //get duration time audio
   getdurationTime(){
     if(isNaN(this.player.nativeElement.duration) === false) {
-
+        this.durationTime = this.player.nativeElement.duration;
+        this.showTime = this.convertSecondstoMinutes(this.durationTime*1000);
     }
   }
+  //play audio
+  playAudio() {
+    if(!this.togglePlay) {
+      this.player.nativeElement.pause();
+      this.iconPlay.nativeElement.className = "fa fa-play";
+    }
+    else {
+      this.player.nativeElement.play();
+      this.iconPlay.nativeElement.className = "fa fa-pause";
+    }
+    this.togglePlay = !this.togglePlay;
+  }
+
+  //go to value in processBar
+  goToValue(event){
+    let widthProcessBar = this.processBar.nativeElement.parentElement.clientWidth;
+    let widthCurrent = event.layerX;
+    console.log(event);
+    console.log(widthCurrent+'--'+widthProcessBar);
+    let valuePercent = (widthCurrent/widthProcessBar);
+    this.player.nativeElement.currentTime = (valuePercent * this.durationTime);
+    this.player.nativeElement.play();
+  }
+
+  // convert milisecond to minutes using momnet js
+    convertSecondstoMinutes(value): string {
+        let time = moment.duration(value);
+        let Minutes = time.minutes();
+        let Second: any = time.seconds();
+        if (Second === 0) {
+            Second = Second + "0";
+        }
+        if (Second > 0 && Second < 10) {
+            Second = "0" + Second;
+        }
+        return (Minutes + ":" + Second);
+    }
+
+    //turn off volume audio
+    changeVolumeAudio() {
+      if(!this.toggleVolume) {
+        this.player.nativeElement.muted = true;
+        this.iconVolume.nativeElement.className = "fa fa-volume-off";
+        }
+        else {
+            this.player.nativeElement.muted = false;
+            this.iconVolume.nativeElement.className = "fa fa-volume-up";
+        }
+        this.toggleVolume = !this.toggleVolume;
+
+    }
+//show time in progress processBar
+  mouseoverShowTiming(event){
+    let widthProcessBar = this.processBar.nativeElement.parentElement.clientWidth;
+        let widthCurrent = event.layerX;
+        let valuePercent = (widthCurrent / widthProcessBar);
+        let milisecondCurrent = (valuePercent * this.durationTime);
+        this.currentTimeHover = this.convertSecondstoMinutes(milisecondCurrent * 1000);
+        this.showTimeHover.nativeElement.style.display = "block";
+        this.showTimeHover.nativeElement.style.left = `${widthCurrent}px`;
+    }
+    // hiden time when mouseleave
+    removeShowTiming() {
+        this.showTimeHover.nativeElement.style.display = "none";
+    }
+    // download audio
+    downloadAudio() {
+        this.state = (this.state === 'active' ? 'inactive' : 'active');
+    }
 }
